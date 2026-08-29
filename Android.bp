@@ -24,7 +24,12 @@ cc_defaults {
     ],
     header_libs: ["display_headers"],
 }
+*/
 
+// Re-enabled: headers-only module, installs nothing, so it cannot recreate
+// the duplicate-module collision this file was disabled for. It is still
+// required by hardware/qcom-caf/sm8150/media/libc2dcolorconvert, and the
+// sm8150 namespace does not import sm8350 where the other copy lives.
 cc_library_headers {
     name: "display_headers",
     vendor: true,
@@ -42,4 +47,3 @@ cc_library_headers {
     header_libs: ["libhardware_headers", "display_intf_headers"],
     export_header_lib_headers: ["libhardware_headers", "display_intf_headers"],
 }
-*/
