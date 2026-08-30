@@ -26,12 +26,14 @@ cc_defaults {
 }
 */
 
-// Re-enabled: headers-only module, installs nothing, so it cannot recreate
-// the duplicate-module collision this file was disabled for. It is still
-// required by hardware/qcom-caf/sm8150/media/libc2dcolorconvert, and the
-// sm8150 namespace does not import sm8350 where the other copy lives.
+// Re-enabled under a unique name. hardware/qcom-caf/sm8150/media still needs
+// these headers, and the sm8150 namespace does not import sm8350 where the
+// other copy lives. The name must differ from sm8350's "display_headers":
+// Soong namespaces isolate module names but Kati/Make does not, and a second
+// MODULE.TARGET.HEADER_LIBRARIES.display_headers is a hard error in
+// build/make/core/base_rules.mk regardless of whether anything is installed.
 cc_library_headers {
-    name: "display_headers",
+    name: "display_headers_sm8150",
     vendor: true,
     export_include_dirs: [
         "include",
