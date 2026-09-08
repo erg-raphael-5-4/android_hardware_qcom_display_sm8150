@@ -4,6 +4,14 @@ cc_library_shared {
     defaults: ["display_defaults"],
     vendor: true,
 
+    // media/msm_media_info.h - kernel source UAPI. The generated kernel
+    // headers export it as vidc/media/msm_media_info.h, so point at the
+    // kernel tree directly. Same pattern as
+    // hardware/qcom-caf/sm8150/media (commit 43c38326).
+    include_dirs: [
+        "kernel/xiaomi/sm8150/techpack/video/include/uapi/vidc",
+    ],
+
     header_libs: [
         "display_headers",
         "qti_kernel_headers",
@@ -57,6 +65,7 @@ cc_library_shared {
         "qti_kernel_headers",
     ],
     include_dirs: [
+        "kernel/xiaomi/sm8150/techpack/video/include/uapi/vidc",
         "system/memory/libion/include",
         "system/memory/libion/kernel-headers",
     ],
@@ -110,6 +119,7 @@ cc_library_shared {
         "qti_kernel_headers",
     ],
     include_dirs: [
+        "kernel/xiaomi/sm8150/techpack/video/include/uapi/vidc",
         "system/memory/libion/include",
         "system/memory/libion/kernel-headers",
     ],
@@ -138,6 +148,14 @@ cc_library_shared {
     defaults: ["display_defaults"],
     vendor: true,
     relative_install_path: "hw",
+
+    // media/msm_media_info.h - kernel source UAPI. The generated kernel
+    // headers export it as vidc/media/msm_media_info.h, so point at the
+    // kernel tree directly. Same pattern as
+    // hardware/qcom-caf/sm8150/media (commit 43c38326).
+    include_dirs: [
+        "kernel/xiaomi/sm8150/techpack/video/include/uapi/vidc",
+    ],
 
     header_libs: [
         "display_headers",
@@ -178,6 +196,14 @@ cc_library_shared {
     vendor: true,
     relative_install_path: "hw",
 
+    // media/msm_media_info.h - kernel source UAPI. The generated kernel
+    // headers export it as vidc/media/msm_media_info.h, so point at the
+    // kernel tree directly. Same pattern as
+    // hardware/qcom-caf/sm8150/media (commit 43c38326).
+    include_dirs: [
+        "kernel/xiaomi/sm8150/techpack/video/include/uapi/vidc",
+    ],
+
     header_libs: [
         "display_headers",
         "qti_kernel_headers",
@@ -215,6 +241,14 @@ cc_binary {
     defaults: ["display_defaults"],
     vendor: true,
     relative_install_path: "hw",
+    // media/msm_media_info.h - kernel source UAPI. The generated kernel
+    // headers export it as vidc/media/msm_media_info.h, so point at the
+    // kernel tree directly. Same pattern as
+    // hardware/qcom-caf/sm8150/media (commit 43c38326).
+    include_dirs: [
+        "kernel/xiaomi/sm8150/techpack/video/include/uapi/vidc",
+    ],
+
     header_libs: [
         "display_headers",
         "qti_kernel_headers",
