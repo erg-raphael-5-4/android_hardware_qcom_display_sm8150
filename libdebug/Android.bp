@@ -1,11 +1,3 @@
-// AUTO-DISABLED for raphael (sm8150 device using sm8350 display HAL).
-// Module names in this file collide with hardware/qcom-caf/sm8350/display,
-// which is the modern composer-service architecture the device wants
-// (per PRODUCT_PACKAGES vendor.qti.hardware.display.composer-service in
-// device/xiaomi/sm8150-common/msmnile.mk and the sm8350 color libs).
-// sm8350 display HAL is on PRODUCT_SOONG_NAMESPACES; both versions visible
-// to Make causes a duplicate-namespace error.
-/*
 cc_library_shared {
 
     name: "libdisplaydebug",
@@ -22,4 +14,3 @@ cc_library_shared {
     export_include_dirs: ["."],
     srcs: ["debug_handler.cpp"],
 }
-*/
