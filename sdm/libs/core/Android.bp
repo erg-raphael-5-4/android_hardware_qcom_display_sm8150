@@ -40,14 +40,6 @@ cc_library_shared {
         "hw_events_interface.cpp",
         "hw_info_interface.cpp",
         "hw_interface.cpp",
-        "fb/hw_info.cpp",
-        "fb/hw_device.cpp",
-        "fb/hw_primary.cpp",
-        "fb/hw_hdmi.cpp",
-        "fb/hw_virtual.cpp",
-        "fb/hw_color_manager.cpp",
-        "fb/hw_scale.cpp",
-        "fb/hw_events.cpp",
     ] + select(soong_config_variable("qtidisplay", "headless"), {
         "true": [],
         default: [

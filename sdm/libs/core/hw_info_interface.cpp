@@ -30,7 +30,6 @@
 #include <utils/utils.h>
 
 #include "hw_info_interface.h"
-#include "fb/hw_info.h"
 #include "drm/hw_info_drm.h"
 
 #define __CLASS__ "HWInfoInterface"
@@ -38,11 +37,11 @@
 namespace sdm {
 
 DisplayError HWInfoInterface::Create(HWInfoInterface **intf) {
-  if (GetDriverType() == DriverType::FB) {
-    *intf = new HWInfo();
-  } else {
-    *intf = new HWInfoDRM();
-  }
+#ifndef TARGET_HEADLESS
+  *intf = new HWInfoDRM();
+#else
+  *intf = nullptr;
+#endif
 
   DisplayError error = kErrorNone;
   if (*intf) {

@@ -33,7 +33,7 @@
 #include <drm_master.h>
 #include <drm_res_mgr.h>
 #include <fcntl.h>
-#include <media/msm_sde_rotator.h>
+#include <display/media/msm_sde_rotator.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

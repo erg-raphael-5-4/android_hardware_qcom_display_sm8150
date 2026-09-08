@@ -31,7 +31,6 @@
 #include <vector>
 
 #include "hw_events_interface.h"
-#include "fb/hw_events.h"
 #include "drm/hw_events_drm.h"
 
 #define __CLASS__ "HWEventsInterface"
@@ -44,10 +43,11 @@ DisplayError HWEventsInterface::Create(int display_id, DisplayType display_type,
                                        const HWInterface *hw_intf, HWEventsInterface **intf) {
   DisplayError error = kErrorNone;
   HWEventsInterface *hw_events = nullptr;
-  if (GetDriverType() == DriverType::FB) {
-    hw_events = new HWEvents();
-  } else {
-    hw_events = new HWEventsDRM();
+#ifndef TARGET_HEADLESS
+  hw_events = new HWEventsDRM();
+#endif
+  if (!hw_events) {
+    return kErrorCriticalResource;
   }
 
   error = hw_events->Init(display_id, display_type, event_handler, event_list, hw_intf);
