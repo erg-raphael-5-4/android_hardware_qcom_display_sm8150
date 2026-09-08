@@ -36,7 +36,7 @@
 // The 3 headers above are a workaround to prevent kernel drm.h from being used that has the
 // "virtual" keyword used for a variable. In future replace libdrm version drm.h with kernel
 // version drm/drm.h
-#include <drm/sde_drm.h>
+#include <display/drm/sde_drm.h>
 #include <private/hw_info_types.h>
 
 namespace sdm {

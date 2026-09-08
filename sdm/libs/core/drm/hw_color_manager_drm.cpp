@@ -35,7 +35,7 @@
 #include <vector>
 
 #ifdef PP_DRM_ENABLE
-#include <drm/msm_drm_pp.h>
+#include <display/drm/msm_drm_pp.h>
 #endif
 #include <utils/debug.h>
 #include "hw_color_manager_drm.h"

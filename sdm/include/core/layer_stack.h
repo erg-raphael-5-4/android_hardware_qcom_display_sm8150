@@ -44,7 +44,7 @@
 #include "sdm_types.h"
 
 #ifdef FOD_ZPOS
-#include <drm/sde_drm.h>
+#include <display/drm/sde_drm.h>
 #endif
 
 namespace sdm {

@@ -39,8 +39,8 @@
 #include "xf86drm.h"
 #include "xf86drmMode.h"
 #include <drm/msm_drm.h>
-#include <drm/msm_drm_pp.h>
-#include <drm/sde_drm.h>
+#include <display/drm/msm_drm_pp.h>
+#include <display/drm/sde_drm.h>
 
 namespace sde_drm {
 

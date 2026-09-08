@@ -32,7 +32,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "hw_device_drm.h"
 #include <drm/msm_drm.h>
-#include <drm/sde_drm.h>
+#include <display/drm/sde_drm.h>
 #include <vector>
 
 namespace sdm {
