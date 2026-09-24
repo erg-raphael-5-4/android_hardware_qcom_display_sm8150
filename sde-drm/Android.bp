@@ -1,0 +1,43 @@
+// sde-drm for sm8150.
+//
+// Ported from hardware/qcom-caf/sm8350/display/sde-drm. sm8150's SDM dlopens
+// libsdedrm.so but the tree ships no implementation, and the only prebuilt
+// available is from a 4.14-era vendor image which misreads DRM connector state
+// on this 5.4 kernel (reports connected=false for a panel the kernel reports as
+// connected). Building from source against this tree's drm_interface.h avoids
+// both problems: the ABI matches sm8150's 57-op DRMOps, and the kernel headers
+// are the ones we actually run.
+cc_library_shared {
+
+    name: "libsdedrm",
+    vendor: true,
+    header_libs: [
+        "display_headers",
+        "qti_kernel_headers",
+    ],
+    shared_libs: [
+        "libdrm",
+        "libdrmutils",
+        "libdisplaydebug",
+    ],
+    cflags: [
+        "-Wno-missing-field-initializers",
+        "-Wall",
+        "-Werror",
+        "-fno-operator-names",
+        "-Wno-unused-parameter",
+        "-DLOG_TAG=\"SDE_DRM\"",
+    ],
+    srcs: [
+        "drm_manager.cpp",
+        "drm_connector.cpp",
+        "drm_encoder.cpp",
+        "drm_crtc.cpp",
+        "drm_plane.cpp",
+        "drm_atomic_req.cpp",
+        "drm_utils.cpp",
+        "drm_pp_manager.cpp",
+        "drm_property.cpp",
+        "drm_stubs.cpp",
+    ],
+}

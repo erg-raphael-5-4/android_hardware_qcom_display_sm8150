@@ -397,6 +397,19 @@ enum struct DRMOps {
    *      uint32_t - Topology control bit-mask
    */
   CONNECTOR_SET_TOPOLOGY_CONTROL,
+  /*
+   * Ops that exist only in later trees. Appended last so every op sm8150's
+   * SDM knows keeps its original index; SDM never emits these.
+   */
+  PLANE_SET_SSPP_LAYOUT,
+  CONNECTOR_SET_FRAME_TRIGGER,
+  CONNECTOR_SET_COLORSPACE,
+  CRTC_SET_CACHE_STATE,
+  CRTC_SET_VM_REQ_STATE,
+  CRTC_RESET_CACHE,
+  PLANES_RESET_CACHE,
+  PLANES_RESET_LUT,
+  COMMIT_PANEL_FEATURES,
 };
 
 enum struct DRMRotation {
@@ -476,6 +489,11 @@ enum struct InlineRotationVersion {
   UNKNOWN,
   V1,
   V1p1,   // Rotator FB ID needs to be set
+  // Renamed in later trees. Aliases so the ported sde-drm compiles; the
+  // underlying values are unchanged.
+  kInlineRotationNone = UNKNOWN,
+  kInlineRotationV1 = V1,
+  kInlineRotationV2 = V1p1,
 };
 
 /* Per CRTC Resource Info*/
@@ -578,6 +596,12 @@ enum struct DRMTopology {
   DUAL_LM_MERGE_DSC,
   DUAL_LM_DSCMERGE,
   PPSPLIT,
+  // Topologies that exist only on larger display pipelines. Appended last;
+  // sm8150 hardware never reports them.
+  QUAD_LM_MERGE,
+  QUAD_LM_DSCMERGE,
+  QUAD_LM_MERGE_DSC,
+  QUAD_LM_DSC4HSMERGE,
 };
 
 enum struct DRMPanelMode {
@@ -704,12 +728,31 @@ enum DRMDPPSFeatureID {
   kFeatureAbaLut,
   // BL scale properties
   kFeatureAd4BlScale,
+  // Renamed in later trees; alias so the ported sde-drm compiles without
+  // shifting any existing value.
+  kFeatureSvBlScale = kFeatureAd4BlScale,
   kFeatureBacklightScale,
   // Events
   kFeaturePowerEvent,
   kFeatureAbaHistEvent,
   kFeatureBackLightEvent,
   kFeatureAdAttBlEvent,
+  // LTM events and properties. sm8150 hardware has no LTM block and its SDM
+  // never requests these, but the ported sde-drm references them. Appended
+  // last so every pre-existing feature id keeps its value.
+  kFeatureLtmHistEvent,
+  kFeatureLtmWbPbEvent,
+  kFeatureLtmOffEvent,
+  kFeatureLtm,
+  kFeatureLtmInit,
+  kFeatureLtmCfg,
+  kFeatureLtmNoiseThresh,
+  kFeatureLtmBufferCtrl,
+  kFeatureLtmQueueBuffer,
+  kFeatureLtmQueueBuffer2,
+  kFeatureLtmQueueBuffer3,
+  kFeatureLtmHistCtrl,
+  kFeatureLtmVlut,
   // Insert features above
   kDppsFeaturesMax,
 };
@@ -718,6 +761,58 @@ struct DppsFeaturePayload {
   uint32_t object_type;
   uint32_t feature_id;
   uint64_t value;
+};
+
+struct DRMDppsLtmBuffers {
+  uint32_t num_of_buffers;
+  uint32_t buffer_size;
+  std::array<int, LTM_BUFFER_SIZE> ion_buffer_fd;
+  std::array<int, LTM_BUFFER_SIZE> drm_fb_id;
+  std::array<void*, LTM_BUFFER_SIZE> uva;
+  int status;
+};
+
+enum struct DRMColorspace {
+  DEFAULT = 0,
+  SMPTE_170M_YCC,
+  BT709_YCC,
+  XVYCC_601,
+  XVYCC_709,
+  SYCC_601,
+  OPYCC_601,
+  OPRGB,
+  BT2020_CYCC,
+  BT2020_RGB,
+  BT2020_YCC,
+  DCI_P3_RGB_D65,
+  DCI_P3_RGB_THEATER,
+};
+
+enum struct DRMSSPPLayoutIndex {
+  NONE = 0,
+  LEFT = 1,
+  RIGHT = 2,
+};
+
+enum struct DRMFrameTriggerMode {
+  FRAME_DONE_WAIT_DEFAULT = 0,
+  FRAME_DONE_WAIT_SERIALIZE,
+  FRAME_DONE_WAIT_POSTED_START,
+};
+
+enum DRMPanelFeatureID {
+  kDRMPanelFeatureRCInit,
+  kDRMPanelFeatureDsppRCInfo,
+  kDRMPanelFeatureMax,
+};
+
+struct DRMPanelFeatureInfo {
+  DRMPanelFeatureID prop_id;
+  uint32_t obj_type;
+  uint32_t obj_id;
+  uint32_t version;
+  uint32_t prop_size;
+  uint64_t prop_ptr;
 };
 
 struct DRMDppsFeatureInfo {
