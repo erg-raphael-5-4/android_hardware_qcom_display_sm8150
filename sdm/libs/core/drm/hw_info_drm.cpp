@@ -619,6 +619,28 @@ DisplayError HWInfoDRM::GetHWRotatorInfo(HWResourceInfo *hw_resource) {
   string v4l2_path = "/sys/class/video4linux/video";
   const uint32_t kMaxV4L2Nodes = 64;
 
+  /*
+   * The V4L2 offline rotator rejects every buffer on this device:
+   *
+   *   HWRotatorV4L2::QueueBuffer: VIDIOC_QBUF failed for input, error 22
+   *   Rotator::Commit: Rotator commit failed for display 54-0
+   *   HWCDisplay::CommitLayerStack: Commit failed. Error = 11
+   *
+   * A failed rotator commit fails the whole layer stack, so any rotated layer
+   * (camera preview being the obvious one) blanks the display entirely.
+   *
+   * Reporting no rotator makes SDM route those layers through GPU composition
+   * instead, which costs nothing here: everything else still composes on
+   * hardware. Gated on a property so it can be flipped without a rebuild.
+   */
+  int disable_rotator = 0;
+  Debug::Get()->GetProperty("vendor.display.disable_offline_rotator", &disable_rotator);
+  if (disable_rotator) {
+    DLOGI("Offline V4L2 rotator disabled by property; layers needing rotation "
+          "will use GPU composition.");
+    return kErrorNone;
+  }
+
   for (uint32_t i = 0; i < kMaxV4L2Nodes; i++) {
     string path = v4l2_path + to_string(i) + "/name";
     Sys::fstream fs(path, fstream::in);
