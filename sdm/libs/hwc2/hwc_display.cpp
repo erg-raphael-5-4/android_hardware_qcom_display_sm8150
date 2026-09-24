@@ -487,6 +487,7 @@ int HWCDisplay::Init() {
 
   validated_ = false;
   HWCDebugHandler::Get()->GetProperty(DISABLE_HDR, &disable_hdr_handling_);
+  HWCDebugHandler::Get()->GetProperty(FORCE_GPU_ROTATION_PROP, &force_gpu_rotation_);
   if (disable_hdr_handling_) {
     DLOGI("HDR Handling disabled");
   }
@@ -739,6 +740,17 @@ void HWCDisplay::BuildLayerStack() {
 
     if (hwc_layer->IsNonIntegralSourceCrop() && !is_secure && !hdr_layer &&
         !layer->flags.single_buffer && !layer->flags.solid_fill) {
+      layer->flags.skip = true;
+    }
+
+    // The DPU cannot rotate a layer by itself: rotation needs either the inline
+    // SSPP rotator (UBWC sources only) or the offline V4L2 rotator. The offline
+    // rotator rejects every buffer on this target (VIDIOC_QBUF -EINVAL), and
+    // when no rotator is available SDM still composes the layer on hardware but
+    // silently drops the transform -- a camera preview then lands on screen 90
+    // degrees out. Mark rotated layers as skip so they fall back to GPU
+    // composition; everything else keeps composing on hardware.
+    if (!layer->flags.skip && force_gpu_rotation_ && layer->transform.rotation != 0.0f) {
       layer->flags.skip = true;
     }
 

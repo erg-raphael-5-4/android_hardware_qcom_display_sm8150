@@ -460,6 +460,7 @@ class HWCDisplay : public DisplayEventHandler {
   HWCToneMapper *tone_mapper_ = nullptr;
   uint32_t num_configs_ = 0;
   int disable_hdr_handling_ = 0;  // disables HDR handling.
+  int force_gpu_rotation_ = 0;  // route rotated layers to GPU composition.
   bool pending_commit_ = false;
   bool is_cmd_mode_ = false;
   bool partial_update_enabled_ = false;
