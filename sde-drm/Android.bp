@@ -27,7 +27,14 @@ cc_library_shared {
         "-fno-operator-names",
         "-Wno-unused-parameter",
         "-DLOG_TAG=\"SDE_DRM\"",
-    ],
+    ] + select(soong_config_variable("qtidisplay", "drmpp"), {
+        // Upstream gets this from qtidisplay_defaults. Without it the
+        // post-processing blob code in drm_pp_manager.cpp compiles out and
+        // every DSPP feature (colour transforms: night light, extra dim,
+        // colour correction; QDCM modes) is silently dropped.
+        "true": ["-DPP_DRM_ENABLE"],
+        default: [],
+    }),
     srcs: [
         "drm_manager.cpp",
         "drm_connector.cpp",
